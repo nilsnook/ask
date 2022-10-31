@@ -1,4 +1,4 @@
-# **A**dd**S**sh**K**ey (ask)
+# AddSshKey (ask)
 
 A simple utility to add ssh keys to ssh-agent.
 
