@@ -18,6 +18,8 @@ type ask struct {
 	config    config
 }
 
+// newAsk gets you a new instance of 'ask'
+// initialized with infoLog, errorLog, homeDir, and configDir
 func newAsk(f *os.File) *ask {
 	infolog := log.New(f, "INFO\t", log.LstdFlags)
 	errorlog := log.New(f, "ERROR\t", log.LstdFlags|log.Lshortfile)
@@ -40,6 +42,9 @@ func newAsk(f *os.File) *ask {
 	}
 }
 
+// setupConfig sets up the config file.
+// It creates one with defaults if it doesn't already exists,
+// and initializes the config var of ask struct.
 func (a *ask) setupConfig() {
 	// logging empty line before each new config setup
 	a.infoLog.Println()
@@ -75,6 +80,7 @@ func (a *ask) setupConfig() {
 	a.config = c
 }
 
+// resolveKey resoves the '~' or '$HOME' in key's path
 func (a *ask) resolveKey(key string) string {
 	if strings.HasPrefix(key, "~/") {
 		key = strings.TrimLeft(key, "~/")
@@ -86,6 +92,8 @@ func (a *ask) resolveKey(key string) string {
 	return key
 }
 
+// addKey adds the ssh key to ssh-agent
+// (in conjunction with 'asksshpass')
 func (a *ask) addKey(key string) error {
 	sshaddCmd := exec.Command("ssh-add", key)
 	sshaddCmd.Stdout = a.infoLog.Writer()
